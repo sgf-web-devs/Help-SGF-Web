@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HelpSGF @ViewData["Title"]</title>
+
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+    </environment>
+
+    @RenderSection("TopScripts", required: false)
+    @RenderSection("Styles", required: false)
+
+    
+</head>
+<body>
+
+<header class="site_header">
+    <div class="container">
+        <a href="#" class="back">
+            <img src="/images/back.svg" alt="Help SGF Logo"> <span>Back</span>
+        </a>
+        <a href="/" class="logo">
+            <img src="/images/logo.svg" alt="Help SGF Logo">
+        </a>
+    </div>
+</header>
+
+<div class="global_wrapper">
+    @RenderBody()
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/plugins.js" asp-append-version="true"></script>
+<script src="~/js/main.js" asp-append-version="true"></script>
+
+<environment include="Development">
+    <script src="~/horse.js"></script>
+</environment>
+
+@RenderSection("Scripts", required: false)
+
+</body>
+</html>

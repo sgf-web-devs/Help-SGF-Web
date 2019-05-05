@@ -1,0 +1,21 @@
+:root {
+    
+}
+
+.category_icon_list
+{
+    --search-list-padding: 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: var(--search-list-padding);
+    grid-template-rows: repeat(4, 20%);
+    overflow: hidden;
+    
+    img {
+        height: 100%;
+    }
+    
+    a {
+        text-align: center;
+    }
+}

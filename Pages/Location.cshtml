@@ -1,0 +1,166 @@
+@page "{locationSlug}"
+@using System.Web
+@using HelpSGFWebApp.Models
+@model HelpSGFWebApp.Pages.Location
+
+@{
+    ViewData["Title"] = "";
+}
+
+<div class="page location_details">
+    <h1 style="line-height: 1.25em">@Model.TheLocation.Name</h1>
+    
+    @Html.Raw(@Model.TheLocation.Description)
+    
+    @if (Model.TheLocation.Categories != null)
+    {
+        <div class="categories">
+            <h3>Categories</h3>
+        
+            <ul style="columns: 2">
+                @foreach (ServiceTypeCategories category in Model.TheLocation.Categories)
+                {
+                    <li>@category.ServiceType</li>
+                }
+            </ul>
+        </div>   
+    }
+    
+    @if (Model.TheLocation.CategoryDetails != null)
+    {
+        <div class="categories">
+            <h3>Category Details</h3>
+        
+            @foreach (Models.Location.CategoryDetail detail in Model.TheLocation.CategoryDetails)
+            {
+                
+                var titles = new List<string>();
+
+                foreach (var category in detail.category)
+                {
+                    if (!titles.Contains(category.serviceType))
+                    {
+                        titles.Add(category.serviceType);
+                    }
+                }
+
+                var title = string.Join(", ", titles).Trim();
+                
+                <h4 style="margin-bottom: 0">@title</h4>
+                @Html.Raw(detail.description)
+            }
+        </div>   
+    }
+    
+    @if (!string.IsNullOrEmpty(Model.TheLocation.FormattedAddress))
+    {
+        <h3 style="margin-top: 2em;">@Model.TheLocation.FormattedAddress</h3>
+    }
+    
+    @if (Model.TheLocation.contacts != null)
+    {
+        <ul class="contact_list">
+            
+            @if (!string.IsNullOrEmpty(Model.TheLocation.FormattedAddress))
+            {
+                <li>
+                    @{
+                        var mapAddress = HttpUtility.UrlEncode(Model.TheLocation.FormattedAddress);
+                    }
+                    <div class="icon">
+                        <img src="/images/directions@@3x.png" alt=""/>
+                    </div>
+                    <div class="details">
+                        <h3>Directions</h3>
+                        <a target="_blank" href="https://www.google.com/maps/place/@mapAddress/">Open In Google Maps</a>
+                    </div>
+                </li>
+            }
+            
+            @foreach (var contact in Model.TheLocation.contacts)
+            {
+                var contactType = contact.ContactType;
+                var description = contact.ContactData;
+                var imageIcon = "call@3x.png";
+                var linkUrl = "";
+
+                if (contactType == "Twitter")
+                {
+                    imageIcon = "twitter@3x.png";
+                    linkUrl = contact.ContactData;
+
+                    if (!linkUrl.StartsWith("http", StringComparison.Ordinal))
+                    {
+                        var username = contact.ContactData.Replace("@", "");
+                        linkUrl = "https://twitter.com/" + username;
+                    }
+                }
+
+                if (contactType == "Email")
+                {
+                    imageIcon = "email@3x.png";
+                }
+
+                if (contactType == "Web Page")
+                {
+                    imageIcon = "link@3x.png";
+                    linkUrl = contact.ContactData;
+
+                    if (!linkUrl.StartsWith("http", StringComparison.Ordinal))
+                    {
+                        linkUrl = "http://" + contact.ContactData;
+                    }
+                }
+
+
+                if (contactType == "Directions")
+                {
+                    imageIcon = "directions@3x.png";
+
+                    var address = contact.ContactData;
+                    description = "Open in Google Maps";
+                }
+
+                if (contactType == "Phone")
+                {
+                    imageIcon = "call@3x.png";
+                }
+
+                // Facebook is a weird one. These two actually need to combine
+                // to make one label/link
+                if (contactType == "Facebook Name")
+                {
+                    continue;
+                }
+
+                if (contactType == "Facebook URL")
+                {
+                    imageIcon = "facebook@3x.png";
+                    var facebookNameEntry = Model.TheLocation.contacts.Where(c => c.ContactType == "Facebook Name");
+                    var nameEntry = facebookNameEntry.ToList();
+                    description = nameEntry.Any() ? nameEntry.First().ContactData : Model.TheLocation.Name;
+                    linkUrl = contact.ContactData;
+                }
+
+                <li>
+                    <div class="icon">
+                        <img src="/images/@imageIcon" alt=""/>
+                    </div>
+                    <div class="details">
+                        <h3>@contactType</h3>
+                        @if (!string.IsNullOrEmpty(linkUrl))
+                        {
+                            <a target="_blank" href="@linkUrl">@description</a>
+                        }
+                        else
+                        {
+                            <p>
+                                @description
+                            </p>
+                        }
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+</div>

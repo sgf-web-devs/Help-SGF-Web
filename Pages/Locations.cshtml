@@ -1,0 +1,35 @@
+@page
+@model HelpSGFWebApp.Pages.Locations
+
+@{
+    ViewData["Title"] = "Locations";
+}
+
+<div class="page search_page">
+    <div class="search_bar">
+        <h1>Search</h1>
+        <form action="/locations/" method="get">
+            <input name="search" id="search" type="text" placeholder="Location, Categories, Type of Need" value="@Model.Search" autofill="false"/>
+        </form>
+    </div>
+    
+    @if (Model.LocationList != null)
+    {
+        <div class="location_list">
+            <ol>
+                @foreach (var location in Model.LocationList)
+                {
+                    var url = "/location" + location.NiceURL;
+                    <li>
+                        <a href="@url">
+                            <div class="details">
+                                <h1>@location.Name</h1>
+                                <h2>@location.FormattedAddressPreview</h2>
+                            </div>
+                        </a>
+                    </li>
+                }
+            </ol>
+        </div>
+    }
+</div>

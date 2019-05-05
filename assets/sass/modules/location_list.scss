@@ -1,0 +1,40 @@
+.location_list
+{
+    ol {
+        counter-reset: location-list-counter;
+        list-style: none;
+        
+        li {
+            counter-increment: my-awesome-counter;
+            position: relative;
+            margin-bottom: 2em;
+        }
+        
+        a {
+            color: #1e1e1e;
+            transition: all .25s;
+            display: flex;
+            
+            &:hover {
+                transform: translateY(-5px);
+            }
+        }
+        
+        li a:before {
+            content: counter(my-awesome-counter)'.';
+            font-size: 1.5em;
+            margin-right: 1em;
+        }
+        
+        h1, h2 {
+            font-size: 1.5em;
+            line-height: 1em;
+            margin: 0;
+        }
+        
+        h2 {
+            font-weight: normal;
+            margin-top: .5em;
+        }
+    }
+}

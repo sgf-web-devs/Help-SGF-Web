@@ -1,0 +1,55 @@
+﻿@page
+@using System.Web
+@using HelpSGFWebApp.Models
+@using HelpSGFWebApp.Services
+@using Newtonsoft.Json
+@{
+    ViewData["Title"] = "";
+    var categories = await GetCategories();
+}
+
+@functions
+{
+    private DataService dataService = new DataService();
+    //ViewData["Categories"] = await dataService.GetMainCategoriesAsync();
+    async Task<List<MainCategory>> GetCategories()
+    {
+        return await dataService.GetMainCategoriesAsync();
+    }
+}
+
+@section Styles
+{
+    <style>
+        .back {
+            display: none;
+        }
+    </style>
+}
+
+<div class="page search_page">
+    <div class="search_bar">
+        <h1>Search</h1>
+        <form action="/locations/" method="get">
+            <input name="search" id="search" type="text" placeholder="Location, Categories, Type of Need" autofill="false" />
+        </form>
+    </div>
+    
+    <div class="category_icon_list">
+        @foreach (var category in categories)
+        {
+            var link = "/locations/?category=" + HttpUtility.UrlEncode(category.Name);
+            var target = "_self";
+
+            if (category.Name.ToLower() == "food")
+            {
+                link = "http://cosmo.maps.arcgis.com/apps/webappviewer/index.html?id=7d901ada9b46499fa99254f08a343466";
+                target = "_blank";
+            }
+            
+            <a href="@link" target="@target">
+                <img src="@category.RemoteImagePath" alt="@category.Name"/>
+            </a>
+        }
+    </div>
+</div>
