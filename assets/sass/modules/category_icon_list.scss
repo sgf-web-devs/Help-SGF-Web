@@ -1,18 +1,14 @@
-:root {
-    
-}
-
 .category_icon_list
 {
     --search-list-padding: 40px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: var(--search-list-padding);
-    grid-template-rows: repeat(4, 20%);
-    overflow: hidden;
+    //grid-template-rows: repeat(4, 15%);
+    //max-height: 100%;
     
     img {
-        height: 100%;
+        max-height: 175px;
     }
     
     a {
